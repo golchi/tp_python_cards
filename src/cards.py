@@ -80,24 +80,30 @@ with open(data_path + 'staff.csv') as csvfile:
         curr_position = row [5].strip()       
         
         
-        print (curr_id + " " + curr_nom)
+        #print (curr_id + " " + curr_nom)
+        
         
         im_staff_path = source_path + curr_id + ".jpg"
+        im_badge = getBgImage()
         if (not os.path.isfile(im_staff_path)) :
+            print ("Mauvais chemin " + curr_id + " " + im_staff_path)
             continue
         im_staff= Image.open(im_staff_path)
-        im_staff= im_staff.resize((width_im_staff, height_im_staff))
+        if (len(curr_nom) > 15 ) :
+              font_size = 20
+              im_staff= im_staff.resize((width_im_staff - 20, height_im_staff - 20))
+              im_badge.paste(im_staff,(x_im_staff, y_im_staff + 30))
+        else :
+            im_staff= im_staff.resize((width_im_staff, height_im_staff))
+            im_badge.paste(im_staff,(x_im_staff, y_im_staff))
         
-        im_badge = getBgImage()
         #im_badge.show()
-        im_badge.paste(im_staff,(x_im_staff, y_im_staff))
+        
 
 
         # Write text on the image
         d1 = ImageDraw.Draw(im_badge)
         
-        if (len(curr_nom) > 15 ) :
-          font_size = 20
           
         myFont = ImageFont.truetype(fonts_path + default_font , font_size)        
 
@@ -109,6 +115,6 @@ with open(data_path + 'staff.csv') as csvfile:
         im_badge.save(output_path + "badge_" + curr_id + ".jpg")
         im_badge.close
         
-        print ("Fin generation :-)")
+print ("Fin generation :-)")
         
 
