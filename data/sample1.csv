@@ -1,7 +1,6 @@
-"Name", "Phone", "ID"
-Kodjo, 1, 30
-KOMO, 2, 29
-ABALO, 3, 31
-EMETE James,4, 16
-JOJO Koli, 5, 24
-"ALPOIOKI-AWKI Mimi", 6, 29
+"Pos", "ID","Surname", "Firstname", "Nationality","Position","Phone"
+1, 30, FILANDER, Anastetia, South-African, Teacher Assistant , 4452655255
+1, 263, MENSAH, E. Sylvie, Ghanaian, Teacher Assistant , 4452655255
+1, 340, AMEGAN-WOVOE, Adanhue J., Togolese, Teacher Assistant , 4452655255
+1, 890, FILANDER, Anastetia, South-African, Purchasing Manager , 4452655255
+
