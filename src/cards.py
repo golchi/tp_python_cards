@@ -1,34 +1,6 @@
 import csv
 from PIL import Image, ImageDraw, ImageFont
 
-
-# Functions
-def writeName (dimage, text, type, myFont) :
-    #According to type use the correct x and y
-   
-    """
-    nom //  prenom -- concatener avec nom
-    nationalite
-    matricule
-    delai
-    """
-    if type == 'nationalite' :        
-        y = 40
-    elif type == 'matricule' :
-        x = 40
-        y = 10
-    elif type == 'delai' :
-        y = 60    
-    else :    
-         x = 10
-         y = 20
-
-    #print ("Voici le nom : " + text)
-    d1.text((x, y), text, font=myFont, fill=(0, 0, 0))
-    #print(', '.join(row))
-    return d1;
-
-
 """
 #TODO use function for writing text
 #TODO use function for saving generated image
@@ -46,30 +18,59 @@ loop csv list
 
 """
 
-#rose.jpg
-#ladies.jpg
+# Functions
+def writeText (dimage, text, type, myFont) :
+    #According to type use the correct x and y
+   
+    """
+    nom //  prenom -- concatener avec nom
+    nationalite
+    matricule
+    delai
+    """ 
+    if type == 'nationality' :  
+         x = 150
+         y = 205
+         dimage.text((x, y), text, font=myFont, fill=(6, 61, 113))
+    elif type == 'position' :
+        x = 150
+        y = 245
+        dimage.text((x, y), text, font=myFont, fill=(6, 61, 113))
+    elif type == 'matricule' :
+        x = 350
+        y = 135
+        dimage.text((x, y), text, font=myFont, fill=(255, 255, 255))
+    elif type == 'delai' :
+        y = 60    
+    else :    
+         x = 150
+         y = 165
+         dimage.text((x, y), text, font=myFont, fill=(6, 61, 113))
+    
+    return dimage;
+
 
 source_path = "../source/"
 output_path = "../output/"
 fonts_path  = "../fonts/"
 data_path   = "../data/"
 
+
+width_im_bg = 648
+height_im_bg = 420
+width_im_staff = 178
+height_im_staff = 180
+x_im_staff = 448
+y_im_staff = 170
+
+font_size = 24
+default_font = 'arial_black.ttf'
+
 # Open image using Image module
-im_ladies = Image.open(source_path + "ladies.jpg")
-im_rose = Image.open(source_path +"rose.jpg")
+im_bg = Image.open(source_path + "bg.jpg")
 
-# Resize both images
-im_ladies = im_ladies.resize((400, 250))
-im_ladies_size = im_ladies.size
-im_rose = im_rose.resize((80, 120))
-im_rose_size = im_rose.size
-
-# Merge images
-new_image = Image.new('RGB',(im_ladies_size[0], im_ladies_size[1]), (250,250,250))
-
-#new_image.save(output_path + "merged_image.jpg","JPEG")
-#new_image.show()
-
+# Resize background image
+im_bg = im_bg.resize((width_im_bg, height_im_bg))
 
 #------------------------
 # Get CSV data 
@@ -82,23 +83,37 @@ with open(data_path + 'sample1.csv') as csvfile:
         if cpte == 0 : 
             cpte += 1
             continue
+        
+        #print (len(row))
+        
+        if (len(row) < 7) : 
+            continue
+        
+        #"Pos", "ID","Surname", "Firstname", "Nationality","Position","Phone"
+        curr_id = row [1].strip()   
+        curr_nom = row [2].strip()   + " " + row[3].strip()       
+        curr_nationality = row [4].strip()     
+        curr_position = row [5].strip()       
+        
+        im_staff= Image.open(source_path + curr_id + ".jpg")
+        im_staff= im_staff.resize((width_im_staff, height_im_staff))
+        
+        im_bg.paste(im_bg,(0,0)) 
+        im_bg.paste(im_staff,(x_im_staff, y_im_staff))
 
-        new_image.paste(im_ladies,(0,0)) 
-        new_image.paste(im_rose,(200,20))
 
-        curr_nom = row [0]   
-        curr_id = row [1]   
-        #curr_nom = row [0]   
-        #curr_nom = row [0]   
-
-        #print (curr_id + "---")
+        print (curr_position + "---")
 
         # Write text on the image
-        d1 = ImageDraw.Draw(new_image)
-        myFont = ImageFont.truetype(fonts_path + 'Alef-Bold.ttf', 40)        
+        d1 = ImageDraw.Draw(im_bg)
+        #Arial Black
+        myFont = ImageFont.truetype(fonts_path + default_font , font_size)        
 
-        d1 = writeName(d1, curr_nom, 'nom', myFont)
+        d1 = writeText(d1, curr_id, 'matricule', myFont)
+        d1 = writeText(d1, curr_nom, 'nom', myFont)
+        d1 = writeText(d1, curr_nationality, 'nationality', myFont)
+        d1 = writeText(d1, curr_position, 'position', myFont)
 
-        new_image.save(output_path + "image_text_" + curr_id + ".jpg")
+        im_bg.save(output_path + "badge_" + curr_id + ".jpg")
         
 
