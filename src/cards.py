@@ -16,7 +16,7 @@ def writeText (dimage, text, type, myFont) :
         dimage.text((x, y), text, font=myFont, fill=(6, 61, 113))
     elif type == 'matricule' :
         x = 350
-        y = 137
+        y = 133
         dimage.text((x, y), text, font=myFont, fill=(255, 255, 255))  
     else :    
          x = 145
@@ -46,11 +46,11 @@ data_path   = "../data/"
 width_im_bg = 648
 height_im_bg = 420
 width_im_staff = 178
-height_im_staff = 180
+height_im_staff = 165
 x_im_staff = 448
 y_im_staff = 170
 
-font_size = 24
+default_font_size = 24
 default_font = 'arial_black.ttf'
 
 MAX_COLUMNS = 6
@@ -89,26 +89,27 @@ with open(data_path + 'staff.csv') as csvfile:
             print ("Mauvais chemin " + curr_id + " " + im_staff_path)
             continue
         im_staff= Image.open(im_staff_path)
-        if (len(curr_nom) > 15 ) :
-              font_size = 20
+        if (len(curr_nom) > 18 ) :
+              font_size = 22
               im_staff= im_staff.resize((width_im_staff - 20, height_im_staff - 20))
               im_badge.paste(im_staff,(x_im_staff, y_im_staff + 30))
         else :
+            font_size = default_font_size
             im_staff= im_staff.resize((width_im_staff, height_im_staff))
             im_badge.paste(im_staff,(x_im_staff, y_im_staff))
         
         #im_badge.show()
         
-
-
         # Write text on the image
         d1 = ImageDraw.Draw(im_badge)
         
           
         myFont = ImageFont.truetype(fonts_path + default_font , font_size)        
-
-        d1 = writeText(d1, curr_id, 'matricule', myFont)
         d1 = writeText(d1, curr_nom, 'nom', myFont)
+        
+        font_size = default_font_size
+        myFont = ImageFont.truetype(fonts_path + default_font , font_size) 
+        d1 = writeText(d1, curr_id, 'matricule', myFont)
         d1 = writeText(d1, curr_nationality, 'nationality', myFont)
         d1 = writeText(d1, curr_position, 'position', myFont)
 
